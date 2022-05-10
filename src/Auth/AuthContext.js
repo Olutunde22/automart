@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import Cookies from 'js-cookie'
-import { login, signup } from '../Api'
+import { login, signup, reset } from '../Api'
 
 const AuthContext = createContext()
 
@@ -12,9 +12,9 @@ export const AuthProvider = ({ children }) => {
     const [accessToken, setAccessToken] = useState(() => Cookies.get('am_at') ? Cookies.get('am_at') : null)
     const [refreshToken, setRefreshToken] = useState(() => Cookies.get('am_rt') ? Cookies.get('am_rt') : null)
 
-    const signUpUser = async (firstName, lastName, email, password) => {
+    const signUpUser = async ({ firstName, lastName, email, password }) => {
         try {
-            const { data, status } = await signup({ firstName, lastName, email, password })
+            const { data, status } = await signup(firstName, lastName, email, password)
             if (status === 200) {
                 setUser(jwt_decode(data.accessToken))
                 setAccessToken(data.accessToken)
@@ -29,9 +29,9 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const loginUser = async (email, password) => {
+    const loginUser = async ({ email, password }) => {
         try {
-            const { data, status } = await login({ email, password })
+            const { data, status } = await login(email, password)
             if (status === 200) {
                 setUser(jwt_decode(data.accessToken))
                 setAccessToken(data.accessToken)
@@ -57,11 +57,17 @@ export const AuthProvider = ({ children }) => {
         Cookies.remove('am_rt')
     }
 
+    const resetPassword = async ({ resetId, password }) => {
+        const { data, status } = await reset(resetId, password)
+        return { data, status }
+    }
+
     let contextData = {
         user,
         loginUser,
         signUpUser,
-        logout
+        logout,
+        resetPassword
     }
 
     return (
