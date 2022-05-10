@@ -16,6 +16,10 @@ export const signup = (body) => {
     return axiosInstance.post('/signup', body)
 }
 
+export const reset = (resetId, body) => {
+    return axiosInstance.post(`/reset/${resetId}`, body)
+}
+
 //CRUD FOR CAR
 export const createCar = (body) => {
     return axiosInstance.post('/car', body)
@@ -31,4 +35,12 @@ export const getCars = () => {
 }
 export const deleteCar = (carId) => {
     return axiosInstance.delete(`/car/${carId}`)
+}
+
+//User
+export const getUser = (userId) => {
+    return axiosInstance.get(`/user/${userId}`)
+}
+export const getUserCars = (userId, carId) => {
+    return axiosInstance.get(`/user/${userId}/car/${carId}`)
 }
