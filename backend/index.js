@@ -17,7 +17,11 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/api/', router)
-
+app.use((req, res) => {
+	return res.status(404).json({
+		message: `Sorry!, can't find ${req.get('host')}${req.url}`,
+	});
+});
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', '*')

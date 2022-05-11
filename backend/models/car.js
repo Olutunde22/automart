@@ -6,6 +6,14 @@ const carSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Name is required']
         },
+        imageUrl: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        },
         year: String,
         condition: {
             type: String,

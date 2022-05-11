@@ -1,6 +1,7 @@
 import express from 'express';
 import user from './controllers/user.js';
 import car from './controllers/car.js'
+import { upload } from './cloudinary/index.js'
 import { authenticateToken } from './auth/authenticate.js'
 
 const router = express.Router();
@@ -19,17 +20,11 @@ router.post('/user/login', user.login);
 
 router.post('/user/logout', user.logout);
 
-router.post('/car', authenticateToken, car.createCarPost)
+router.post('/car', authenticateToken, upload.single('image'), car.createCarPost)
 
 router.delete('/car/:id', authenticateToken, car.deleteCarPost)
 
 
-
-router.all('/*', (req, res) => {
-    res.status(400).json({
-        message: 'Sorry, this endpoint does not exists'
-    })
-})
 
 
 export default router;
