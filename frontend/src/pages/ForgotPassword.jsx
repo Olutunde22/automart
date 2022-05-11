@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {  Link } from "react-router-dom";
+import Layout from '../components/Layout'
 
 const ForgotPasswordSchema = Yup.object().shape({
   email: Yup.string()
@@ -21,7 +22,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 xl:px-12 sm:px-6 lg:px-8">
+    <Layout>
+    <div className="h-full flex items-center justify-center bg-gray-100 py-12 px-4 xl:px-12 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 px-12 bg-white py-8 shadow-lg rounded-xl">
         <div>
           <h2 className="mt-6 text-center text-xl sm:text-3xl font-extrabold text-gray-900">
@@ -94,6 +96,7 @@ const ForgotPassword = () => {
         </Formik>
       </div>
     </div>
+    </Layout>
   );
 };
 
