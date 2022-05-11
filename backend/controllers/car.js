@@ -3,15 +3,16 @@ import User from '../models/user.js'
 
 
 const createCarPost = async (req, res) => {
-    const { name, year, condition, make, body, color, price, createdBy } = req.body
+    const { name, year, condition, make, body, color, price, createdBy, description } = req.body
     if (!(name && year && condition
         && make && body && color &&
-        price && createdBy)) return res.status(422).json({
-            message: 'Please make sure [name, condition, make, body, color, price and createdBy fields are populated] '
+        price && createdBy && req.file)) return res.status(422).json({
+            message: 'Please make sure [image is provided, name, condition, make, body, color, description price and createdBy fields are populated] '
         })
     try {
+        const { path } = req.file
         const carPost = new Car({
-            name, year, condition, make, body, color, price, createdBy
+            name, year, condition, make, body, color, price, createdBy, description, imageUrl: path
         })
         await carPost.save()
         return res.status(200).json({ message: 'Car Created Successfully' });

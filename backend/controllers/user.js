@@ -1,4 +1,5 @@
 import User from '../models/user.js'
+import { generateAccessToken, generateRefreshToken } from '../auth/authenticate.js'
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 const saltRounds = 10
@@ -12,11 +13,22 @@ const signUp = async (req, res) => {
 			email,
 			password
 		})
+
+		if (!(firstName && lastName && email && password)) {
+			return res.status(401).json({
+				message: 'Please make sure [firstName, lastName, email and passowrd] are provided'
+			})
+		}
+
+		const foundUser = await User.findOne({ email: email })
+		if (foundUser) return res.status(401).json({
+			message: 'Sorry, this email address is already in use'
+		})
+
 		const hashed = await hashPassword(password)
 		user.salt = hashed.salt
 		user.password = hashed.password
 		user.resetId = uuidv4()
-		await user.save()
 		const accessToken = generateAccessToken({
 			firstName: user.firstName,
 			lastName: user.lastName,
@@ -27,10 +39,11 @@ const signUp = async (req, res) => {
 			lastName: user.lastName,
 			email: user.email,
 		});
+		await user.save()
 		await addRefreshToken({ email: user.email, refreshToken: refreshToken });
 		return res.status(200).json({ accessToken, refreshToken });
 	} catch (error) {
-		return false
+		return res.status(400).json({ message: 'Error while trying to signup, please try again.' });
 	}
 }
 

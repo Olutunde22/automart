@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import User from '../services/user.js'
+import User from '../controllers/user.js'
 
 export const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -14,7 +14,7 @@ export const authenticateToken = (req, res, next) => {
 }
 
 export const generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' })
 }
 
 export const generateRefreshToken = (user) => {
@@ -34,7 +34,7 @@ export const refreshToken = async (req, res) => {
             lastName: user.lastName,
             email: user.email,
         })
-        res.json({ accessToken: accessToken })
+        res.status(200).json({ accessToken: accessToken })
     })
 
 }
