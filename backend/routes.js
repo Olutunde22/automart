@@ -1,15 +1,31 @@
 import express from 'express';
 import user from './controllers/user.js';
+import car from './controllers/car.js'
+import { authenticateToken } from './auth/authenticate.js'
 
 const router = express.Router();
 
-router.post('/signup', user.signup);
+router.get('/car', car.getAllCarPost)
 
-router.post('/login', user.login);
+router.get('/car/:carId', car.getCarPostById)
 
-router.post('/logout', user.logout);
+router.get('/user/:userId/car', car.getUserPosts)
 
-router.all('/*', (req, res) =>{
+router.patch('/car/:carId', authenticateToken, car.editCarPost)
+
+router.post('/user/signup', user.signUp);
+
+router.post('/user/login', user.login);
+
+router.post('/user/logout', user.logout);
+
+router.post('/car', authenticateToken, car.createCarPost)
+
+router.delete('/car/:id', authenticateToken, car.deleteCarPost)
+
+
+
+router.all('/*', (req, res) => {
     res.status(400).json({
         message: 'Sorry, this endpoint does not exists'
     })
