@@ -17,7 +17,7 @@ function App() {
           <Route path="/cars" element={<Cars />} />
           <Route path="/car/:carId" element={<Car />} />
           <Route
-            path="/createcar"
+            path="/create-car"
             exact={true}
             element={
               <PrivateRoute>
