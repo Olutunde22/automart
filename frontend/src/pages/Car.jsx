@@ -13,7 +13,7 @@ const Car = () => {
   const { carId } = useParams();
   const navigate = useNavigate();
   const [carPost, setCarPost] = useState();
-  const { user, accessToken } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [modal, setModal] = useState(false);
 
   const onModalClose = () => {
@@ -25,17 +25,17 @@ const Car = () => {
       const response = await getCar(carId);
       setCarPost(response.data);
     } catch (err) {
-      errorHandler(err);
+      errorHandler(err.message || err.response.message || err.response.data.message);
     }
   }, [carId]);
 
   const handleDeletePost = async () => {
     try {
-      await deleteCar(carId, { userId: user._id }, accessToken);
+      await deleteCar(carId, user._id);
       successHandler("Car deleted Successfully");
       navigate("/");
     } catch (err) {
-      errorHandler(err);
+      errorHandler(err.message || err.response.message || err.response.data.message);
     }
   };
 

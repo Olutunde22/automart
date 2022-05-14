@@ -82,7 +82,7 @@ const EditCarModal = ({ modal, onModalClose, carPost, setCarPost }) => {
       successHandler("Edited Car");
       onModalClose();
     } catch (err) {
-      errorHandler(err.message || err.response.message);
+      errorHandler(err.message || err.response.message || err.response.data.message);
     }
   };
   return (

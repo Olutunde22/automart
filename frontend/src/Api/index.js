@@ -45,8 +45,8 @@ export const getCar = (carId) => {
 export const getCars = (limit) => {
     return axiosInstance.get(`/car?limit=${limit}`)
 }
-export const deleteCar = (carId) => {
-    return axiosInstance.delete(`/car/${carId}`)
+export const deleteCar = (carId, userId) => {
+    return axiosInstance.delete(`/car/${carId}/${userId}`,)
 }
 
 //User
