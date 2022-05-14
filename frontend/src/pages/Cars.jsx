@@ -6,30 +6,46 @@ import { Link } from "react-router-dom";
 import { getCars } from "../Api";
 import { errorHandler } from "../utilities";
 
+const searchFilters = [
+  { name: "Name", filter: "name" },
+  { name: "Make", filter: "make" },
+  { name: "Body", filter: "body" },
+  { name: "Clear Filter", filter: "all" },
+];
+
 const Cars = () => {
-  const [searchFilter, setSearchFilter] = useState("Name");
+  const [searchFilter, setSearchFilter] = useState(searchFilters[0].filter);
   const [search, setSearch] = useState("");
   const [cars, setCars] = useState([]);
+  const [unfilteredCars, setUnfilteredCars] = useState([]);
 
   const getCarsPost = async () => {
     try {
       const cars = await getCars(50);
       setCars(cars.data);
+      setUnfilteredCars(cars.data);
     } catch (err) {
       errorHandler(err.message || err.response.message);
     }
   };
 
+  const handleFilter = (e) => {
+    setSearch(e.target.value);
+    let cars = unfilteredCars;
+    if (searchFilter === "all") {
+      setCars(cars);
+    } else {
+      setCars(
+        cars.filter((c) =>
+          c[searchFilter].toLowerCase().includes(e.target.value)
+        )
+      );
+    }
+  };
   useEffect(() => {
     getCarsPost();
   }, []);
 
-  const searchFilters = [
-    { name: "Name", filter: "name" },
-    { name: "Make", filter: "make" },
-    { name: "Body", filter: "body" },
-    { name: "All", filter: "" },
-  ];
   return (
     <Layout>
       <div className="bg-cars flex justify-center items-center">
@@ -40,7 +56,7 @@ const Cars = () => {
             type="text"
             placeholder="Search..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleFilter(e)}
           />
           <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -67,7 +83,7 @@ const Cars = () => {
                   {searchFilters.map((filter, idx) => (
                     <Menu.Item key={idx}>
                       <button
-                        onClick={() => setSearchFilter(filter.name)}
+                        onClick={() => setSearchFilter(filter.filter)}
                         className="block text-left px-4 py-2 text-sm w-full"
                       >
                         {filter.name}
@@ -80,9 +96,10 @@ const Cars = () => {
           </Menu>
         </div>
       </div>
-      <h2 className="text-2xl font-bold leading-normal text-center my-14">List of available cars</h2>
+      <h2 className="text-2xl font-bold leading-normal text-center my-14">
+        List of available cars
+      </h2>
       <div className="mx-2 grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-4 md:px-6">
-       
         {cars.map((car, idx) => (
           <div
             className="shadow-lg max-w-sm rounded-t-md overflow-hidden"

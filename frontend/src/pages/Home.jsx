@@ -52,7 +52,7 @@ const Home = () => {
         </h2>
         <div className="lg:flex lg:items-center lg:justify-center">
           <div className="mx-2 grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3 px-4 md:px-6">
-            {cars.map((car, idx) => (
+            {cars.reverse().map((car, idx) => (
               <div
                 className="shadow-lg max-w-sm rounded-t-md overflow-hidden"
                 key={idx}

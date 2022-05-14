@@ -41,7 +41,7 @@ const Car = () => {
           </div>
           <div className="max-w-4xl mx-auto bg-white py-12 px-12 lg:px-24">
             <h2 className="mt-4 uppercase tracking-widest text-xs text-gray-600">
-              {moment(carPost.createdAt).format("Do MMM YYYY")}
+              {moment(carPost.createdAt).format("Do MMM, YYYY")}
             </h2>
             <h1 className="font-display text-2xl md:text-3xl text-gray-900 mt-4 flex">
               {carPost.name} - {carPost.year}{" "}
@@ -62,7 +62,7 @@ const Car = () => {
               <small className="bg-gray-200 rounded-full p-2">
                 {carPost.condition}
               </small>
-              <p>
+              <p data-color-mode="light">
                 {" "}
                 <MDEditor.Markdown source={carPost.description} />
               </p>

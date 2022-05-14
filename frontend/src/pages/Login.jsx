@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import AuthContext from "../Auth/AuthContext.js";
@@ -24,7 +24,7 @@ const Login = () => {
     const response = await loginUser({ email, password });
     if (response.status === 200) {
       setSubmitting(false);
-      successHandler("Signup Successul!");
+      successHandler("Login Successul!");
       navigate('/')
     } else {
       errorHandler(response.data.message);
