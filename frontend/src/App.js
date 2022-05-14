@@ -12,7 +12,7 @@ function App() {
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/login" exact={true} element={<Login />} />
           <Route path="/forgot-password" exact={true} element={<ForgotPassword />} />
-          <Route path="/reset-password/:resetId" exact={true} element={<ResetPassword />} />
+          <Route path="/reset-password/:resetId" element={<ResetPassword />} />
           <Route path="/signup" exact={true} element={<Signup />} />
           <Route path="/cars" element={<Cars />} />
           <Route path="/car/:carId" element={<Car />} />
