@@ -1,17 +1,24 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import Layout from "../components/Layout";
-import { useParams } from "react-router-dom";
-import { getCar } from "../Api";
-import { errorHandler } from "../utilities";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCar, deleteCar } from "../Api";
+import { errorHandler, successHandler } from "../utilities";
 import moment from "moment";
-import { PencilAltIcon } from "@heroicons/react/outline";
+import { PencilAltIcon, TrashIcon } from "@heroicons/react/outline";
 import AuthContext from "../Auth/AuthContext";
 import MDEditor from "@uiw/react-md-editor";
+import EditCarModal from "../components/EditCarModal";
 
 const Car = () => {
   const { carId } = useParams();
+  const navigate = useNavigate();
   const [carPost, setCarPost] = useState();
-  const { user } = useContext(AuthContext);
+  const { user, accessToken } = useContext(AuthContext);
+  const [modal, setModal] = useState(false);
+
+  const onModalClose = () => {
+    setModal(false);
+  };
 
   const handleGetPost = useCallback(async () => {
     try {
@@ -22,7 +29,19 @@ const Car = () => {
     }
   }, [carId]);
 
-  const handleEditCarPost = () => {};
+  const handleDeletePost = async () => {
+    try {
+      await deleteCar(carId, { userId: user._id }, accessToken);
+      successHandler("Car deleted Successfully");
+      navigate("/");
+    } catch (err) {
+      errorHandler(err);
+    }
+  };
+
+  const handleEditCarPost = () => {
+    setModal(true);
+  };
 
   useEffect(() => {
     handleGetPost();
@@ -46,10 +65,15 @@ const Car = () => {
             <h1 className="font-display text-2xl md:text-3xl text-gray-900 mt-4 flex">
               {carPost.name} - {carPost.year}{" "}
               {user && user._id === carPost.createdBy._id ? (
-                <PencilAltIcon
-                  onClick={() => handleEditCarPost()}
-                  className="ml-2 h-8 w-8"
-                />
+                <>
+                  <button onClick={() => handleEditCarPost()}>
+                    <PencilAltIcon className="ml-2 h-6 w-6 text-blue-500" />
+                  </button>
+
+                  <button onClick={() => handleDeletePost()}>
+                    <TrashIcon className="ml-2 h-6 w-6 text-red-500" />
+                  </button>
+                </>
               ) : null}
             </h1>
             <div className="prose prose-sm sm:prose lg:prose-lg mt-6">
@@ -82,6 +106,12 @@ const Car = () => {
               </p>
             </div>
           </div>
+          <EditCarModal
+            modal={modal}
+            onModalClose={onModalClose}
+            carPost={carPost}
+            setCarPost={setCarPost}
+          />
         </>
       )}
     </Layout>

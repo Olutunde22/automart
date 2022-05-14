@@ -8,6 +8,7 @@ import { createCar } from "../Api";
 import { errorHandler, successHandler } from "../utilities/index.js";
 import AuthContext from "../Auth/AuthContext.js";
 import Axios from "axios";
+import { years, make, condition, body } from "../utilities/index.js";
 
 const createCarSchema = Yup.object().shape({
   name: Yup.string().required("Car name is Required"),
@@ -26,12 +27,7 @@ const CreateCar = () => {
   const [description, setDescription] = useState("");
   const [fileValue, setFileValue] = useState();
   const [createdCar, setCreatedCar] = useState();
-  const years = [
-    2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010,
-  ];
-  const condition = ["Nigerian Used", "Brand New", "Foreign Used"];
-  const make = ["Toyota", "Mercedes-Benz", "Lexus", "Honda", "Ford"];
-  const body = ["Van", "Suv", "Sedan", "Pickup"];
+
   let navigate = useNavigate();
 
   const handleSubmit = async (
@@ -59,17 +55,17 @@ const CreateCar = () => {
       };
       const formData = new FormData();
       formData.append("file", fileValue);
-      formData.append("upload_preset", "ftxw2t2o");
-      formData.append("cloud_name", "dixvcadud");
+      formData.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
+      formData.append("cloud_name", process.env.REACT_APP_CLOUDNAME);
       formData.append("folder", "automobiles");
       const response = await Axios.post(
-        `https://api.cloudinary.com/v1_1/dixvcadud/upload`,
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDNAME}/upload`,
         formData
       );
       carDetails.imageUrl = response.data.url;
 
       const savedCar = await createCar(carDetails, accessToken);
-      setCreatedCar(savedCar.data)
+      setCreatedCar(savedCar.data);
       successHandler("Car Post created successfully");
     } catch (err) {
       if (err.response.status === 401 || err.response.status === 403) {

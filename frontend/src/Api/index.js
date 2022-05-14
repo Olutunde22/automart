@@ -32,8 +32,12 @@ export const createCar = (body, token) => {
         }
     })
 }
-export const editCar = (carId, body) => {
-    return axiosInstance.patch(`/car/${carId}`, body)
+export const editCar = (carId, body, token) => {
+    return axiosInstance.patch(`/car/${carId}`, body, {
+        headers: {
+            'Authorization': `Bearer ${token} `
+        }
+    })
 }
 export const getCar = (carId) => {
     return axiosInstance.get(`/car/${carId}`)
