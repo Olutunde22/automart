@@ -40,7 +40,7 @@ const carSchema = new mongoose.Schema(
         },
         createdBy: {
             type: mongoose.SchemaTypes.ObjectId,
-            ref: "user",
+            ref: "User",
             required: true,
         }
     },

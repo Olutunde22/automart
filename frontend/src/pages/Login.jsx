@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import AuthContext from "../Auth/AuthContext.js";
 import { useNavigate, Link } from "react-router-dom";
 import Layout from "../components/Layout";
+import { errorHandler, successHandler } from "../utilities/index.js";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -15,7 +16,6 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = () => {
-  const [error, setError] = useState("");
   const { loginUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
@@ -24,11 +24,10 @@ const Login = () => {
     const response = await loginUser({ email, password });
     if (response.status === 200) {
       setSubmitting(false);
+      successHandler("Signup Successul!");
+      navigate('/')
     } else {
-      setError(response.data.message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      errorHandler(response.data.message);
     }
   };
 
@@ -60,12 +59,6 @@ const Login = () => {
           >
             {({ isSubmitting, errors, touched }) => (
               <Form>
-                {error ? (
-                  <div className="transform motion-safe:hover:scale-110 flex text-red-700 bg-red-100 py-2 px-4 rounded">
-                    <div className="text-sm md:text-normal inline">{error}</div>{" "}
-                  </div>
-                ) : null}
-
                 <div className="my-2">
                   <label htmlFor="email" className="text-gray-500 font-normal">
                     Email address

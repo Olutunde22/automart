@@ -1,19 +1,19 @@
 import Axios from 'axios';
 
 const axiosInstance = Axios.create({
-    baseURL: 'http://localhost:3000/api/',
+    baseURL: 'https://4000-olutunde22-automart-3fifz825goz.ws-eu45.gitpod.io/api/',
     headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
+
     },
 });
 
 //AUTH
 export const login = (body) => {
-    return axiosInstance.post('/login', body)
+    return axiosInstance.post('/user/login', body)
 }
 export const signup = (body) => {
-    return axiosInstance.post('/signup', body)
+    return axiosInstance.post('/user/signup', body)
 }
 
 export const reset = (resetId, body) => {
@@ -21,8 +21,12 @@ export const reset = (resetId, body) => {
 }
 
 //CRUD FOR CAR
-export const createCar = (body) => {
-    return axiosInstance.post('/car', body)
+export const createCar = (body, token) => {
+    return axiosInstance.post('/car', body, {
+        headers: {
+            'Authorization': `Bearer ${token} `
+        }
+    })
 }
 export const editCar = (carId, body) => {
     return axiosInstance.patch(`/car/${carId}`, body)
@@ -30,17 +34,14 @@ export const editCar = (carId, body) => {
 export const getCar = (carId) => {
     return axiosInstance.get(`/car/${carId}`)
 }
-export const getCars = () => {
-    return axiosInstance.get('/car')
+export const getCars = (limit) => {
+    return axiosInstance.get(`/car?limit=${limit}`)
 }
 export const deleteCar = (carId) => {
     return axiosInstance.delete(`/car/${carId}`)
 }
 
 //User
-export const getUser = (userId) => {
-    return axiosInstance.get(`/user/${userId}`)
-}
 export const getUserCars = (userId, carId) => {
-    return axiosInstance.get(`/user/${userId}/car/${carId}`)
+    return axiosInstance.get(`/user/${userId}/car`)
 }

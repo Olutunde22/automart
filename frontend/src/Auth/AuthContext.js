@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
     const signUpUser = async ({ firstName, lastName, email, password }) => {
         try {
-            const { data, status } = await signup(firstName, lastName, email, password)
+            const { data, status } = await signup({ firstName, lastName, email, password })
             if (status === 200) {
                 setUser(jwt_decode(data.accessToken))
                 setAccessToken(data.accessToken)
@@ -25,13 +25,13 @@ export const AuthProvider = ({ children }) => {
             }
         }
         catch (error) {
-            return { data: 'Error could not load', status: 500 }
+            return error.response
         }
     }
 
     const loginUser = async ({ email, password }) => {
         try {
-            const { data, status } = await login(email, password)
+            const { data, status } = await login({ email, password })
             if (status === 200) {
                 setUser(jwt_decode(data.accessToken))
                 setAccessToken(data.accessToken)
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
             }
         }
         catch (error) {
-            return { data: 'Error could not load', status: 500 }
+            return error.response
         }
     }
 
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const resetPassword = async ({ resetId, password }) => {
-        const { data, status } = await reset(resetId, password)
+        const { data, status } = await reset({ resetId, password })
         return { data, status }
     }
 
@@ -67,7 +67,8 @@ export const AuthProvider = ({ children }) => {
         loginUser,
         signUpUser,
         logout,
-        resetPassword
+        resetPassword,
+        accessToken
     }
 
     return (

@@ -9,44 +9,46 @@ function classNames(...classes) {
 }
 
 const Header = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const location = useLocation();
-  const navigation = [
+  let navigation = [
     {
       name: "Home",
       href: "/",
       current: location.pathname === "/" ? true : false,
-      show: true,
     },
     {
       name: "Cars",
       href: "/cars",
-      current: location.pathname === "/cars" ? true : false,
-      show: true,
+      current: location.pathname.startsWith('/car') ? true : false,
     },
     {
-      name: "Login",
-      href: "/login",
-      current: location.pathname === "/login" ? true : false,
-      show: user ? false : true,
+      name: !user ? "Login" : "Create Car",
+      href: !user ? "/login" : "/create-car",
+      current: !user
+        ? location.pathname === "/login"
+          ? true
+          : false
+        : location.pathname === "/create-car"
+        ? true
+        : false,
     },
     {
-      name: "Signup",
-      href: "/signup",
-      current: location.pathname === "/signup" ? true : false,
-      show: user ? false : true,
-    },
-    {
-      name: "Create Car",
-      href: "/create-car",
-      current: location.pathname === "/create-car" ? true : false,
-      show: !user ? false : true,
+      name: !user ? "Signup" : "My Cars",
+      href: !user ? "/signup" : "/my-posts",
+      current: !user
+        ? location.pathname === "/signup"
+          ? true
+          : false
+        : location.pathname === "/my-posts"
+        ? true
+        : false,
     },
   ];
 
   return (
     <>
-      <Disclosure as="nav" className=" relative w-screen bg-white h-full">
+      <Disclosure as="nav" className=" relative w-screen bg-white h-full z-20">
         {({ open }) => (
           <>
             <div className="max-w-7xl mx-auto py-2 sm:py-4 px-2">
@@ -66,23 +68,30 @@ const Header = () => {
                   <div className="flex-shrink-0 flex items-center"></div>
                   <div className="hidden sm:block my-auto ml-auto lg:mr-12 lg:items-center lg:w-auto lg:space-x-12">
                     <div className="flex items-center space-x-4">
-                      {navigation.map((item) => (
-                        <>
-                          {item.show && (
-                            <Link
-                              to={item.href}
-                              key={item.name}
-                              className={classNames(
-                                item.current && "bg-blue-600 text-white ",
-                                "px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 hover:text-white"
-                              )}
-                              aria-current={item.current ? "page" : undefined}
-                            >
-                              {item.name}
-                            </Link>
-                          )}
-                        </>
+                      {navigation.map((item, idx) => (
+                        <div key={idx}>
+                          <Link
+                            to={item.href}
+                            key={item.name}
+                            className={classNames(
+                              item.current && "bg-blue-600 text-white ",
+                              "px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 hover:text-white"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                          >
+                            {item.name}
+                          </Link>
+                        </div>
                       ))}
+
+                      {user && (
+                        <button
+                          onClick={() => logout()}
+                          className="bg-red-600 text-white px-3 py-2 hover:bg-red-500"
+                        >
+                          Logout
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -104,27 +113,33 @@ const Header = () => {
                 }`}
               >
                 <div className="px-2 animate-slideUp-header pt-2 pb-3 flex flex-col">
-                  {navigation.map((item) => (
-                    <>
-                      {item.show && (
-                        <Link
-                          to={item.href}
-                          key={item.name}
-                          className={classNames(
-                            item.current && "bg-blue-600 text-white",
-                            " px-3 mx-auto self-start py-2 rounded-md text-base font-medium"
-                          )}
+                  {navigation.map((item, idx) => (
+                    <div key={idx}>
+                      <Link
+                        to={item.href}
+                        key={item.name}
+                        className={classNames(
+                          item.current && "bg-blue-600 text-white",
+                          " px-3 mx-auto self-start py-2 rounded-md text-base font-medium"
+                        )}
+                      >
+                        <Disclosure.Button
+                          as="div"
+                          aria-current={item.current ? "page" : undefined}
                         >
-                          <Disclosure.Button
-                            as="div"
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </Disclosure.Button>
-                        </Link>
-                      )}
-                    </>
+                          {item.name}
+                        </Disclosure.Button>
+                      </Link>
+                    </div>
                   ))}
+                  {user && (
+                    <button
+                      onClick={() => logout()}
+                      className="bg-red-600 text-white px-3 py-2 hover:bg-red-500"
+                    >
+                      Logout
+                    </button>
+                  )}
                 </div>
               </Disclosure.Panel>
             </Transition>
