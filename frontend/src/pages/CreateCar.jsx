@@ -71,12 +71,12 @@ const CreateCar = () => {
       if (err.response.status === 401 || err.response.status === 403) {
         logout();
         errorHandler("Session expired, kindly login again");
-  };
         navigate("/login");
       } else {
         errorHandler(err.response.data.message);
       }
     }
+  };
 
   return (
     <Layout>
@@ -89,13 +89,13 @@ const CreateCar = () => {
           </div>
           <Formik
             initialValues={{
-              name: "",
-              year: "2020",
+              name: "Testing car",
+              year: "2018",
               condition: "Nigerian Used",
               make: "Toyota",
               body: "Van",
-              color: "",
-              price: "",
+              color: "green",
+              price: 100000,
             }}
             validationSchema={createCarSchema}
             onSubmit={handleSubmit}
