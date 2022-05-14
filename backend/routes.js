@@ -23,7 +23,7 @@ router.post('/car', authenticateToken, car.createCarPost)
 
 router.post('/refresh', refreshToken)
 
-router.delete('/car/:id', authenticateToken, car.deleteCarPost)
+router.delete('/car/:carId/:userId', car.deleteCarPost)
 
 
 

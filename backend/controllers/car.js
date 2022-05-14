@@ -98,8 +98,7 @@ const editCarPost = async (req, res) => {
 }
 
 const deleteCarPost = async (req, res) => {
-    const { carId } = req.params
-    const { userId } = req.body
+    const { carId, userId } = req.params
     try {
         const exisitingCar = await Car.findById(carId)
         if (!exisitingCar) {
@@ -107,7 +106,7 @@ const deleteCarPost = async (req, res) => {
                 message: `Post with this id  [${carId}] does not exist`
             })
         }
-        if (exisitingCar.createdBy !== userId) {
+        if (exisitingCar.createdBy != userId) {
             return res.status(401).json({
                 message: 'Sorry you cannot delete a post you did not create'
             })
