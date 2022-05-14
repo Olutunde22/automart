@@ -78,16 +78,17 @@ const editCarPost = async (req, res) => {
             })
         }
 
-        if (exisitingCar.createdBy !== userId) {
+        if (exisitingCar.createdBy != userId) {
             return res.status(401).json({
                 message: 'Sorry you cannot edit a post you did not create'
             })
         }
         const updatedCar = await Car.findByIdAndUpdate(
             carId,
-            { ...req.body },
+            { ...req.body, 
+                createdBy: userId },
             { returnOriginal: false }
-        );
+        ).populate('createdBy', 'firstName lastName email')
         return res.status(200).json(updatedCar)
     } catch (error) {
         return res.status(400).json({
