@@ -30,6 +30,7 @@ const Signup = () => {
     if (response.status === 200) {
       setSubmitting(false);
       successHandler("Signup Successul!");
+      navigate('/')
     } else {
       errorHandler(response.data.message);
     }
