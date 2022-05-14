@@ -3,19 +3,18 @@ import User from '../models/user.js'
 
 
 const createCarPost = async (req, res) => {
-    const { name, year, condition, make, body, color, price, createdBy, description } = req.body
+    const { name, year, condition, make, body, color, price, createdBy, description, imageUrl } = req.body
     if (!(name && year && condition
         && make && body && color &&
-        price && createdBy && req.file)) return res.status(422).json({
+        price && createdBy && imageUrl)) return res.status(422).json({
             message: 'Please make sure [image is provided, name, condition, make, body, color, description price and createdBy fields are populated] '
         })
     try {
-        const { path } = req.file
         const carPost = new Car({
-            name, year, condition, make, body, color, price, createdBy, description, imageUrl: path
+            name, year, condition, make, body, color, price, createdBy, description, imageUrl
         })
-        await carPost.save()
-        return res.status(200).json({ message: 'Car Created Successfully' });
+        const savedCar = await carPost.save()
+        return res.status(200).json(savedCar);
     } catch (error) {
         return res.status(400).json({
             message: 'Error while trying to create this post, please try again.'
@@ -26,7 +25,7 @@ const createCarPost = async (req, res) => {
 const getCarPostById = async (req, res) => {
     const { carId } = req.params
     try {
-        const exisitingCar = await Car.findById(carId)
+        const exisitingCar = await Car.findById(carId).populate('createdBy', 'firstName lastName email')
         if (!exisitingCar) {
             return res.status(404).json({ message: `Post with this id [${carId}] does not exist` })
         }
@@ -39,18 +38,10 @@ const getCarPostById = async (req, res) => {
 }
 
 const getAllCarPost = async (req, res) => {
-    const { limit, name, make, body } = req.query
+    let { limit } = req.query
     limit = limit ? limit : 100
-    name = name ? name : ''
-    make = make ? make : ''
-    body = body ? body : ''
     try {
-        const posts = await Car.find({
-            name: { $regex: '.*' + name + '.*' },
-            make: { $regex: '.*' + make + '.*' },
-            body: { $regex: '.*' + body + '.*' }
-        }.limit(limit))
-
+        const posts = await Car.find().limit(limit)
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(400).json({

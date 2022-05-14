@@ -4,8 +4,7 @@ import User from '../controllers/user.js'
 export const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]
-    if (token == null) return res.status(401).json({message: 'You must be logged in to create a post'})
-
+    if (token === null || token === ' null') return res.status(401).json({ message: 'You must be logged in to create a post' })
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.status(403).json({ message: 'User not authenticated' })
         req.user = user
@@ -14,7 +13,7 @@ export const authenticateToken = (req, res, next) => {
 }
 
 export const generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
 }
 
 export const generateRefreshToken = (user) => {
@@ -30,6 +29,7 @@ export const refreshToken = async (req, res) => {
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) return res.status(401)
         const accessToken = generateAccessToken({
+            _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,

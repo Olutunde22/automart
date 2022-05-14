@@ -29,17 +29,20 @@ const signUp = async (req, res) => {
 		user.salt = hashed.salt
 		user.password = hashed.password
 		user.resetId = uuidv4()
+
+		const savedUser = await user.save()
 		const accessToken = generateAccessToken({
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email,
+			_id: savedUser._id,
+			firstName: savedUser.firstName,
+			lastName: savedUser.lastName,
+			email: savedUser.email,
 		});
 		const refreshToken = generateRefreshToken({
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email,
+			_id: savedUser._id,
+			firstName: savedUser.firstName,
+			lastName: savedUser.lastName,
+			email: savedUser.email,
 		});
-		await user.save()
 		await addRefreshToken({ email: user.email, refreshToken: refreshToken });
 		return res.status(200).json({ accessToken, refreshToken });
 	} catch (error) {
@@ -69,11 +72,13 @@ const login = async (req, res) => {
 			})
 		}
 		const accessToken = generateAccessToken({
+			_id: foundUser._id,
 			firstName: foundUser.firstName,
 			lastName: foundUser.lastName,
 			email: foundUser.email,
 		});
 		const refreshToken = generateRefreshToken({
+			_id: foundUser._id,
 			firstName: foundUser.firstName,
 			lastName: foundUser.lastName,
 			email: foundUser.email,

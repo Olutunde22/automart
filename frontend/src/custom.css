@@ -1,3 +1,10 @@
 .w-90{
     width: 90vw
 }
+
+.bg-cars{
+    background-image: url('https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20rem;
+}

@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import AuthContext from "../Auth/AuthContext.js";
 import { useNavigate, Link } from "react-router-dom";
 import Layout from "../components/Layout";
+import { errorHandler, successHandler } from "../utilities/index.js";
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string().required("Firstname is required"),
@@ -17,8 +18,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const Signup = () => {
-  const [error, setError] = useState("");
-  const { signupUser } = useContext(AuthContext);
+  const { signUpUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
   const handleSignup = async (
@@ -26,14 +26,12 @@ const Signup = () => {
     { setSubmitting }
   ) => {
     setSubmitting(true);
-    const response = await signupUser({ firstName, lastName, email, password });
+    const response = await signUpUser({ firstName, lastName, email, password });
     if (response.status === 200) {
       setSubmitting(false);
+      successHandler("Signup Successul!");
     } else {
-      setError(response.data.message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      errorHandler(response.data.message);
     }
   };
 
@@ -67,12 +65,6 @@ const Signup = () => {
           >
             {({ isSubmitting, errors, touched }) => (
               <Form>
-                {error ? (
-                  <div className="transform motion-safe:hover:scale-110 flex text-red-700 bg-red-100 py-2 px-4 rounded">
-                    <div className="text-sm md:text-normal inline">{error}</div>{" "}
-                  </div>
-                ) : null}
-
                 <div className="my-2">
                   <label htmlFor="email" className="text-gray-500 font-normal">
                     First name
