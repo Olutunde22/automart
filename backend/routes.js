@@ -23,6 +23,10 @@ router.post('/car', authenticateToken, car.createCarPost)
 
 router.post('/refresh', refreshToken)
 
+router.post('/forgot', user.forgotPassword)
+
+router.post('/reset/:resetId', user.resetPassword)
+
 router.delete('/car/:carId/:userId', car.deleteCarPost)
 
 

@@ -57,11 +57,6 @@ export const AuthProvider = ({ children }) => {
         Cookies.remove('am_rt')
     }
 
-    const resetPassword = async ({ resetId, password }) => {
-        const { data, status } = await reset({ resetId, password })
-        return { data, status }
-    }
-
     const updateToken = async () => {
         try {
             const response = await refresh({ email: user.email, token: refreshToken })
@@ -84,7 +79,6 @@ export const AuthProvider = ({ children }) => {
         loginUser,
         signUpUser,
         logout,
-        resetPassword,
         accessToken
     }
 
