@@ -20,7 +20,7 @@ const Header = () => {
     {
       name: "Cars",
       href: "/cars",
-      current: location.pathname.startsWith('/car') ? true : false,
+      current: location.pathname.startsWith("/car") ? true : false,
     },
     {
       name: !user ? "Login" : "Create Car",
@@ -34,15 +34,9 @@ const Header = () => {
         : false,
     },
     {
-      name: !user ? "Signup" : "My Cars",
-      href: !user ? "/signup" : "/my-posts",
-      current: !user
-        ? location.pathname === "/signup"
-          ? true
-          : false
-        : location.pathname === "/my-posts"
-        ? true
-        : false,
+      name: !user && "Signup",
+      href: !user && "/signup",
+      current: !user && (location.pathname === "/signup" ? true : false),
     },
   ];
 
@@ -119,7 +113,7 @@ const Header = () => {
                         to={item.href}
                         key={item.name}
                         className={classNames(
-                          item.current && "bg-blue-600 text-white",
+                          item.current && "underline",
                           " px-3 mx-auto self-start py-2 rounded-md text-base font-medium"
                         )}
                       >

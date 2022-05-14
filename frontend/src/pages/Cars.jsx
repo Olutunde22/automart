@@ -37,7 +37,7 @@ const Cars = () => {
     } else {
       setCars(
         cars.filter((c) =>
-          c[searchFilter].toLowerCase().includes(e.target.value)
+          c[searchFilter].toLowerCase().includes(e.target.value.toLowerCase())
         )
       );
     }
@@ -100,7 +100,7 @@ const Cars = () => {
         List of available cars
       </h2>
       <div className="mx-2 grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-4 md:px-6">
-        {cars.map((car, idx) => (
+        {cars?.map((car, idx) => (
           <div
             className="shadow-lg max-w-sm rounded-t-md overflow-hidden"
             key={idx}
