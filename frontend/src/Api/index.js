@@ -20,6 +20,10 @@ export const reset = (resetId, body) => {
     return axiosInstance.post(`/reset/${resetId}`, body)
 }
 
+export const refresh = (body) => {
+    return axiosInstance.post('/refresh', body)
+}
+
 //CRUD FOR CAR
 export const createCar = (body, token) => {
     return axiosInstance.post('/car', body, {

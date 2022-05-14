@@ -1,7 +1,7 @@
 import express from 'express';
 import user from './controllers/user.js';
 import car from './controllers/car.js'
-import { authenticateToken } from './auth/authenticate.js'
+import { authenticateToken, refreshToken } from './auth/authenticate.js'
 
 const router = express.Router();
 
@@ -20,6 +20,8 @@ router.post('/user/login', user.login);
 router.post('/user/logout', user.logout);
 
 router.post('/car', authenticateToken, car.createCarPost)
+
+router.post('/refresh', refreshToken)
 
 router.delete('/car/:id', authenticateToken, car.deleteCarPost)
 
