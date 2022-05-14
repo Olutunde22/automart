@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const axiosInstance = Axios.create({
-    baseURL: 'https://4000-olutunde22-automart-3fifz825goz.ws-eu45.gitpod.io/api/',
+    baseURL: `${process.env.REACT_APP_API}`,
     headers: {
         'Content-Type': 'application/json',
 
